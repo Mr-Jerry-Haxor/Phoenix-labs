@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import FileUploadAPIView  #, ImageUploadAPIView
+from .views import FileUploadAPIView, TranslationView ,AudioRecognitionView
 # from rest_framework.routers import DefaultRouter
 #
 # router = DefaultRouter()
@@ -15,4 +15,6 @@ from .views import FileUploadAPIView  #, ImageUploadAPIView
 
 urlpatterns = [
     path('transcript/', FileUploadAPIView.as_view(), name='transcript'),
+    path('translate/', TranslationView.as_view(), name='translate'),
+    path('transcript-v2/', AudioRecognitionView.as_view(), name='recognize-audio'),
 ]
