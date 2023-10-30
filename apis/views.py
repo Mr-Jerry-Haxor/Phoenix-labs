@@ -8,8 +8,8 @@ import soundfile
 import numpy as np
 import stt
 import speech_recognition as sr
-from pydub import AudioSegment
-from pydub.silence import split_on_silence
+# from pydub import AudioSegment
+# from pydub.silence import split_on_silence
 from transformers import pipeline
 
 # Create a pipeline for text-to-text generation using the m2m100 model
@@ -106,36 +106,36 @@ class AudioRecognitionView(APIView):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def silence_based_conversion(self, audio_file):
-        # Open the audio file stored in the local system as a wav file.
-        song = AudioSegment.from_wav(audio_file)
+    # def silence_based_conversion(self, audio_file):
+    #     # Open the audio file stored in the local system as a wav file.
+    #     song = AudioSegment.from_wav(audio_file)
 
-        # Open a file where we will concatenate and store the recognized text
-        recognized_text = ""
+    #     # Open a file where we will concatenate and store the recognized text
+    #     recognized_text = ""
 
-        # Split track where silence is 0.5 seconds or more and get chunks
-        chunks = split_on_silence(song,
-            min_silence_len=500,  # Must be silent for at least 0.5 seconds (500 ms)
-            silence_thresh=-16  # Consider it silent if quieter than -16 dBFS
-        )
+    #     # Split track where silence is 0.5 seconds or more and get chunks
+    #     chunks = split_on_silence(song,
+    #         min_silence_len=500,  # Must be silent for at least 0.5 seconds (500 ms)
+    #         silence_thresh=-16  # Consider it silent if quieter than -16 dBFS
+    #     )
 
-        for i, chunk in enumerate(chunks):
-            # Create 0.5 seconds silence chunk
-            chunk_silent = AudioSegment.silent(duration=10)
+    #     for i, chunk in enumerate(chunks):
+    #         # Create 0.5 seconds silence chunk
+    #         chunk_silent = AudioSegment.silent(duration=10)
 
-            # Add 0.5 sec silence to the beginning and end of audio chunk
-            audio_chunk = chunk_silent + chunk + chunk_silent
+    #         # Add 0.5 sec silence to the beginning and end of audio chunk
+    #         audio_chunk = chunk_silent + chunk + chunk_silent
 
-            # Export audio chunk and save it
-            audio_chunk.export(f"./audio_chunks/chunk{i}.wav", bitrate='192k', format="wav")
+    #         # Export audio chunk and save it
+    #         audio_chunk.export(f"./audio_chunks/chunk{i}.wav", bitrate='192k', format="wav")
 
-            # Recognize the chunk
-            recognized_chunk = self.recognize_audio_chunk(f"./audio_chunks/chunk{i}.wav")
+    #         # Recognize the chunk
+    #         recognized_chunk = self.recognize_audio_chunk(f"./audio_chunks/chunk{i}.wav")
 
-            if recognized_chunk:
-                recognized_text += recognized_chunk + " "
+    #         if recognized_chunk:
+    #             recognized_text += recognized_chunk + " "
 
-        return recognized_text
+    #     return recognized_text
 
     def recognize_audio_chunk(self, audio_chunk_path):
         r = sr.Recognizer()
