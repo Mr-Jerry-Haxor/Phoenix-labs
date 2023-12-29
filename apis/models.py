@@ -9,3 +9,7 @@ class Transcription(models.Model):
     
     def __str__(self):
         return self.uploaded_on.date()
+    
+class ScrapedData(models.Model):
+    url = models.URLField()
+    data = models.TextField()
